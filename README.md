@@ -2,7 +2,7 @@
     RizonJS
 </h1>
 
-A JavasSript Open Source Library for Rizon.
+A JavasSript Open Source Library for RIZON Blockchain.
 
 ## Installation
 
@@ -11,7 +11,7 @@ In order to fully use this library, you need to run a local or remote full node 
 ### Git
 
 ```bash
-git clone https://github.com/dogesa-dac/rizonjs
+git clone https://github.com/rizon-world/rizonjs.git
 ```
 
 ## Import 
@@ -30,6 +30,7 @@ import rizonjs from "rizonjs";
 #### Browser script
 
 - You can see example file at /example/browser-example.html
+- You need to setup rizon blockchain node in local or remote
 
 ```js
 <script src="../dist/rizon.js"></script>
