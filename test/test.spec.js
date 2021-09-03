@@ -5,13 +5,14 @@ const mnemonic = "swear buyer security impulse public stereo peasant correct cro
 
 describe("Rizon", function() {
 	const chainId = "groot-011";
-	const cosmos = cosmosjs.network("https://lcd-rizon-testnet.cosmostation.io", chainId);
+	const rizon = cosmosjs.network("http://127.0.0.1:1337", chainId);
+	rizon.setBech32MainPrefix("rizon");
+	rizon.setPath("m/44'/1217'/0'/0/0");
 	describe("getAddress", function () {
 
 		it("gets a cosmos address from mnemonic", function () {
-			let address = cosmos.getAddress(mnemonic);
+			let address = rizon.getAddress(mnemonic);
 			assert.strictEqual(address, "rizon1juaucju67kcxpn522k9h5et8h529tqlnayghma");
 		});
 	});
 });
-

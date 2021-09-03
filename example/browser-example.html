@@ -8,9 +8,10 @@
 	<script src="../dist/rizon.js"></script>
 	<script>
 		function send() {
+			// [WARNING] This mnemonic is just for the demo purpose. DO NOT USE THIS MNEMONIC for your own wallet.
 			const mnemonic = "swear buyer security impulse public stereo peasant correct cross tornado bid discover anchor float venture deal patch property cool wreck eight dwarf december surface";
 			const chainId = "groot-011";
-			const rizon = rizonjs.network("https://lcd-rizon-testnet.cosmostation.io", chainId);
+			const rizon = rizonjs.network("http://127.0.0.1:1317", chainId);
 			rizon.setBech32MainPrefix("rizon");
 			rizon.setPath("m/44'/1217'/0'/0/0");
 			const address = rizon.getAddress(mnemonic);
@@ -19,13 +20,12 @@
 			console.log("myAddress: ", address);
 			document.getElementById('myAddress').innerHTML = "[myAddress]<br>" + address;
 
-			// You can send ATOM by running the code below.
-			/*
+			// You can send uatolo by running the code below.
 			rizon.getAccounts(address).then(data => {
 				let stdSignMsg = rizon.newStdMsg({
 					msgs: [
 						{
-							type: "rizon-sdk/MsgSend",
+							type: "cosmos-sdk/MsgSend",
 							value: {
 								amount: [
 									{
@@ -48,7 +48,6 @@
 				const signedTx = rizon.sign(stdSignMsg, ecpairPriv);
 				rizon.broadcast(signedTx).then(response => console.log(response));
 			})
-			*/
 		}
 	</script>
 </head>
