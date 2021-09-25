@@ -5,7 +5,7 @@ const mnemonic = "swear buyer security impulse public stereo peasant correct cro
 
 describe("Rizon", function() {
 	const chainId = "groot-014";
-	const rizon = cosmosjs.network("http://127.0.0.1:1337", chainId);
+	const rizon = cosmosjs.network("http://seed-2.testnet.rizon.world:1337", chainId);
 	rizon.setBech32MainPrefix("rizon");
 	rizon.setPath("m/44'/118'/0'/0/0");
 	describe("getAddress", function () {

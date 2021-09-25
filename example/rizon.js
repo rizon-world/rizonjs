@@ -2,8 +2,8 @@ const rizonjs = require("../src");
 
 // [WARNING] This mnemonic is just for the demo purpose. DO NOT USE THIS MNEMONIC for your own wallet.
 const mnemonic = "swear buyer security impulse public stereo peasant correct cross tornado bid discover anchor float venture deal patch property cool wreck eight dwarf december surface";
-const chainId = "groot-011";
-const rizon = rizonjs.network("https://lcd-rizon-testnet.cosmostation.io", chainId);
+const chainId = "groot-014";
+const rizon = rizonjs.network("http://seed-2.testnet.rizon.world:1337", chainId);
 rizon.setBech32MainPrefix("rizon");
 rizon.setPath("m/44'/118'/0'/0/0");
 const address = rizon.getAddress(mnemonic);
