@@ -5,7 +5,7 @@ const mnemonic = "swear buyer security impulse public stereo peasant correct cro
 const chainId = "groot-011";
 const rizon = rizonjs.network("https://lcd-rizon-testnet.cosmostation.io", chainId);
 rizon.setBech32MainPrefix("rizon");
-rizon.setPath("m/44'/1217'/0'/0/0");
+rizon.setPath("m/44'/118'/0'/0/0");
 const address = rizon.getAddress(mnemonic);
 const ecpairPriv = rizon.getECPairPriv(mnemonic);
 
@@ -23,7 +23,7 @@ rizon.getAccounts(address).then(data => {
 						}
 					],
 					from_address: address,
-					to_address: "rizon1xjdla8awqz8kw74sakdh969t7mm4ypwdwnj435"
+					to_address: "rizon1fnk3lxlks7tdg6x55ynv6vggtnd73ycqnam5u8"
 				}
 			}
 		],

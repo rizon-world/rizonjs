@@ -41,11 +41,11 @@ import rizonjs from "rizonjs";
 ```js
 const rizonjs = require("rizonjs");
 
-const chainId = "groot-011";
+const chainId = "groot-014";
 const rizon = rizonjs.network(lcdUrl, chainId);
 
 const mnemonic = "..."
-rizon.setPath("m/44'/1217'/0'/0/0");
+rizon.setPath("m/44'/118'/0'/0/0");
 const address = rizon.getAddress(mnemonic);
 const ecpairPriv = rizon.getECPairPriv(mnemonic);
 ```
