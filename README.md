@@ -41,7 +41,7 @@ import rizonjs from "rizonjs";
 ```js
 const rizonjs = require("rizonjs");
 
-const chainId = "groot-014";
+const chainId = "groot-14";
 const rizon = rizonjs.network(lcdUrl, chainId);
 
 const mnemonic = "..."
