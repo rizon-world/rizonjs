@@ -1,6 +1,6 @@
 # Rizon  
 
-In this docs, these are supporting message types in Rizon(groot-011).
+In this docs, these are supporting message types in Rizon(groot-14).
 
 ### Supporting Message Types
 

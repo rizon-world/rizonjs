@@ -93,4 +93,4 @@ rizon.broadcast(signedTx).then(response => console.log(response));
 ```
 
 ## Supporting Message Types
-- If you need more message types, you can see /docs/msg_types
+- If you need more message types, you can see [/docs/msg_types](https://github.com/rizon-world/rizonjs/blob/main/docs/msg_types/rizon.md)
