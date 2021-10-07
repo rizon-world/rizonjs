@@ -5,7 +5,7 @@ const mnemonic = "swear buyer security impulse public stereo peasant correct cro
 // groot-14 means the name of public testnet chain-id of rizon.
 const chainId = "groot-14";
 // "http://seed-2.testnet.rizon.world" is an endpoint for public testnet of rizon.
-const rizon = rizonjs.network("http://seed-2.testnet.rizon.world:1337", chainId);
+const rizon = rizonjs.network("http://seed-2.testnet.rizon.world:1317", chainId);
 rizon.setBech32MainPrefix("rizon");
 rizon.setPath("m/44'/118'/0'/0/0");
 const address = rizon.getAddress(mnemonic);
