@@ -119,5 +119,5 @@ package-lock.json
 # Proto files
 /proto
 
-# yarn dependency
+# dependencies
 yarn.lock
