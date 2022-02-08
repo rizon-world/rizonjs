@@ -112,3 +112,12 @@ dist
 .vscode-test
 
 package-lock.json
+
+# Build output
+/build
+
+# Proto files
+/proto
+
+# yarn dependency
+yarn.lock

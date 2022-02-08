@@ -1,0 +1,29 @@
+{
+    "compilerOptions": {
+        "rootDir": ".",
+        "outDir": "build/lib",
+        "resolveJsonModule": true,
+        "allowUnreachableCode": false,
+        "allowUnusedLabels": false,
+        "declaration": true,
+        "esModuleInterop": true,
+        "isolatedModules": true,
+        "forceConsistentCasingInFileNames": true,
+        "lib": ["es2018"],
+        "module": "commonjs",
+        "noEmitOnError": true,
+        "noFallthroughCasesInSwitch": true,
+        "noImplicitReturns": true,
+        "pretty": true,
+        "sourceMap": true,
+        "strict": true,
+        "target": "es2018",
+        "experimentalDecorators": true
+    },
+    "typedocOptions": {
+        "entryPoints": ["src/index.ts"],
+        "out": "docs",
+        "exclude": []
+    },
+    "exclude": ["build", "node_modules", "**/*.spec.ts", "tests/**"]
+}

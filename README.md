@@ -1,5 +1,5 @@
 <h1 align="center">
-    RizonJS
+    RIZON - Javascript SDK
 </h1>
 
 A JavasSript Open Source Library for RIZON Blockchain.
@@ -14,49 +14,55 @@ In order to fully use this library, you need to run a local or remote full node 
 git clone https://github.com/rizon-world/rizonjs.git
 ```
 
-## Import 
+## Import
 
 #### NodeJS
 
 ```js
-const rizonjs = require("rizonjs");
+const rizonjs = require('rizonjs');
 ```
 
 #### ES6 module
+
 ```js
-import rizonjs from "rizonjs";
+import rizonjs from 'rizonjs';
 ```
 
 #### Browser script
 
-- You can see example file at /example/browser-example.html
-- You need to setup rizon blockchain node in local or remote
+-   You can see example file at /example/browser-example.html
+-   You need to setup rizon blockchain node in local or remote
 
 ```js
 <script src="../dist/rizon.js"></script>
 ```
 
 ## Usage
-- Rizon: Generate Rizon address from mnemonic 
-```js
-const rizonjs = require("rizonjs");
 
-const chainId = "groot-14";
+-   Rizon: Generate Rizon address from mnemonic
+
+```js
+const rizonjs = require('rizonjs');
+
+const chainId = 'groot-14';
 const rizon = rizonjs.network(lcdUrl, chainId);
 
-const mnemonic = "..."
+const mnemonic = '...';
 rizon.setPath("m/44'/118'/0'/0/0");
 const address = rizon.getAddress(mnemonic);
 const ecpairPriv = rizon.getECPairPriv(mnemonic);
 ```
 
 Generate ECPairPriv value that is needed for signing signatures
+
 ```js
 const ecpairPriv = rizon.getECPairPriv(mnemonic);
 ```
 
-Transfer ATOLO to designated address. 
-* Make sure to input proper type, account number, and sequence of the rizon account to generate StdSignMsg. You can get those account information on blockchain
+Transfer ATOLO to designated address.
+
+-   Make sure to input proper type, account number, and sequence of the rizon account to generate StdSignMsg. You can get those account information on blockchain
+
 ```js
 rizon.getAccounts(address).then(data => {
 	let stdSignMsg = rizon.newStdMsg({
@@ -87,10 +93,12 @@ rizon.getAccounts(address).then(data => {
 ```
 
 Sign transaction by using stdSignMsg and broadcast by using the Rizon REST API(LCD)
+
 ```js
 const signedTx = rizon.sign(stdSignMsg, ecpairPriv);
-rizon.broadcast(signedTx).then(response => console.log(response));
+rizon.broadcast(signedTx).then((response) => console.log(response));
 ```
 
 ## Supporting Message Types
-- If you need more message types, you can see [/docs/msg_types](https://github.com/rizon-world/rizonjs/blob/main/docs/msg_types/rizon.md)
+
+-   If you need more message types, you can see [/docs/msg_types](https://github.com/rizon-world/rizonjs/blob/main/docs/msg_types/rizon.md)
