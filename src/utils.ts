@@ -2,7 +2,7 @@ import * as cryp from 'crypto-browserify';
 import * as hexEncoding from 'crypto-js/enc-hex';
 import SHA3 from 'crypto-js/sha3';
 import * as uuid from 'uuid';
-import { Secp256k1, sha256, ripemd160, EnglishMnemonic, Bip39, Slip10, Slip10Curve, stringToPath } from '@cosmjs/crypto';
+import { Secp256k1, sha256, ripemd160, EnglishMnemonic, Bip39, Slip10, Slip10Curve, stringToPath, Random } from '@cosmjs/crypto';
 import { Bech32, toHex, fromHex } from '@cosmjs/encoding';
 
 import * as constants from './constants';
@@ -34,7 +34,7 @@ export interface KeyStore {
 export const keyToHex = (key: Uint8Array, xPrefix = false): string => {
     const hexKey = toHex(key);
     if (xPrefix) {
-        return hexKey;
+        return '0x' + hexKey;
     }
     return hexKey;
 };
@@ -64,17 +64,25 @@ export const getPublicKeyFromPrivateKey = async (privateKey: Uint8Array): Promis
     return Secp256k1.compressPubkey(pubkey);
 };
 
-export const getPrivateKeyFromMnemonic = async (mnemonic: string, hdPath = getRizonHdPath(0)): Promise<Uint8Array> => {
-    const mnemonicChecked = new EnglishMnemonic(mnemonic);
-    // TODO: add support for more languages
-    const seed = await Bip39.mnemonicToSeed(mnemonicChecked);
+export const getPrivateKeyFromSeed = (seed: Uint8Array, hdPath = getRizonHdPath(0)): Uint8Array => {
     const { privkey } = Slip10.derivePath(Slip10Curve.Secp256k1, seed, stringToPath(hdPath));
     return privkey;
+};
+
+export const getSeedFromMnemonic = async (mnemonic: string): Promise<Uint8Array> => {
+    const mnemonicChecked = new EnglishMnemonic(mnemonic);
+    // TODO: add support for more languages
+    return Bip39.mnemonicToSeed(mnemonicChecked);
 };
 
 const sha3 = (hex: string): string => {
     const hexEncoded = hexEncoding.parse(hex);
     return SHA3(hexEncoded).toString();
+};
+
+export const getPrivateKeyFromMnemonic = async (mnemonic: string, hdPath = getRizonHdPath(0)): Promise<Uint8Array> => {
+    const seed = await getSeedFromMnemonic(mnemonic);
+    return getPrivateKeyFromSeed(seed, hdPath);
 };
 
 export const getPrivateKeyFromKeystore = (keystore: string | KeyStore, password: string): Uint8Array => {
@@ -148,13 +156,28 @@ export const generateKeyStore = (privateKey: Uint8Array, password: string): KeyS
 /**
  * Generates a random private key
  */
-export const generatePrivateKey = (): string => {
-    throw new Error('Not implemented');
+export const generatePrivateKey = (): Uint8Array => {
+    return Random.getBytes(constants.PrivateKeyLength);
+};
+
+export const isAddressValid = (address: string, prefix: string | undefined = constants.RizonAddressPrefix): boolean => {
+    try {
+        const decoded = Bech32.decode(address);
+        return (!prefix || prefix === decoded.prefix) && decoded.data.length === constants.DecodedAddressLength;
+    } catch (err) {
+        return false;
+    }
 };
 
 /**
  * Generates a random mnemonic
+ *
+ * @see https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki#generating-the-mnemonic
+ * @param words The number of words requested
  */
-export const generateMnemonic = (): string => {
-    throw new Error('Not implemented');
+export const generateMnemonic = (words_legnth: 12 | 24 = constants.MnemonicLengthShort): string => {
+    const entropy = Random.getBytes(words_legnth === constants.MnemonicLengthShort ? constants.EntroypLength_16 : constants.EntroypLength_32);
+    const mnemonic = Bip39.encode(entropy);
+    // TODO: add support for more languages
+    return mnemonic.toString();
 };
