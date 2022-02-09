@@ -1,5 +1,5 @@
-import * as utils from './utils';
-import * as constants from './constants';
+import * as utils from '../utils';
+import * as constants from '../constants';
 
 export class RizonWallet {
     public readonly privateKey: Uint8Array;
@@ -17,7 +17,7 @@ export class RizonWallet {
         return new RizonWallet(privateKey, publicKey, addressPrefix);
     };
 
-    static fromMnemonic = async (mnemonic: string, hdPath = utils.getRizonHdPath(0), addressPrefix = constants.RizonAddressPrefix) => {
+    static fromMnemonic = async (mnemonic: string, hdPath = constants.getRizonHdPath(0), addressPrefix = constants.RizonAddressPrefix) => {
         const privateKey = await utils.getPrivateKeyFromMnemonic(mnemonic, hdPath);
         return RizonWallet.fromPrivateKey(privateKey, addressPrefix);
     };
