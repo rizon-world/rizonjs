@@ -75,17 +75,16 @@ rizon.getAccounts(address).then(data => {
 	});
 
 	const authInfo = new message.cosmos.tx.v1beta1.AuthInfo({ signer_infos: [signerInfo], fee: feeValue });
-
-	const signedTxBytes = rizon.Sign(txBody, authInfo, data.account.account_number, privKey);
-	rizon.broadcast(signedTxBytes).then(response => console.log(response));
-
+	...
+	
 });
 ```
 
 Sign transaction by using stdSignMsg and broadcast by using the Rizon REST API(LCD)
 ```js
-const signedTx = rizon.sign(stdSignMsg, ecpairPriv);
-rizon.broadcast(signedTx).then(response => console.log(response));
+const signedTxBytes = rizon.Sign(txBody, authInfo, data.account.account_number, privKey);	
+rizon.broadcast(signedTxBytes).then(response => console.log(response));
+
 ```
 
 ## Supporting Message Types
