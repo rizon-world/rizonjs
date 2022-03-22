@@ -12,6 +12,7 @@ In order to fully use this library, you need to run a local or remote full node 
 
 ```bash
 git clone https://github.com/rizon-world/rizonjs.git
+git checkout features/support_magnus
 ```
 
 ## Import 
@@ -19,13 +20,10 @@ git clone https://github.com/rizon-world/rizonjs.git
 #### NodeJS
 
 ```js
-const rizonjs = require("rizonjs");
+const rizonjs = require("../src");
+const message = require("../modules/messages/proto.js")
 ```
 
-#### ES6 module
-```js
-import rizonjs from "rizonjs";
-```
 
 ## Usage
 - Rizon: Generate Rizon address from mnemonic 
