@@ -27,15 +27,6 @@ const rizonjs = require("rizonjs");
 import rizonjs from "rizonjs";
 ```
 
-#### Browser script
-
-- You can see example file at /example/browser-example.html
-- You need to setup rizon blockchain node in local or remote
-
-```js
-<script src="../dist/rizon.js"></script>
-```
-
 ## Usage
 - Rizon: Generate Rizon address from mnemonic 
 ```js
