@@ -7,13 +7,15 @@ const bech32 = require('bech32');
 const secp256k1 = require('secp256k1');
 const crypto = require('crypto');
 const bitcoinjs = require('bitcoinjs-lib');
+const message = require('../modules/messages/proto');
+const request = require('request')
 
 let Cosmos = function(url, chainId) {
 	this.url = url;
 	this.chainId = chainId;
 	this.path = "m/44'/118'/0'/0/0";
 	this.bech32MainPrefix = "cosmos";
-
+	
 	if (!this.url) {
 		throw new Error("url object was not set or invalid")
 	}
@@ -102,6 +104,19 @@ Cosmos.prototype.getECPairPriv = function(mnemonic) {
 	return ecpair.privateKey;
 }
 
+Cosmos.prototype.getPubkeyAny = function(privKey) {
+	const pubKeyByte = secp256k1.publicKeyCreate(privKey);
+	var buf1 = new Buffer.from([10]);
+	var buf2 = new Buffer.from([pubKeyByte.length]);
+	var buf3 = new Buffer.from(pubKeyByte);
+	const pubKey = Buffer.concat([buf1, buf2, buf3]);
+	const pubKeyAny = new message.google.protobuf.Any({
+		type_url: "/cosmos.crypto.secp256k1.PubKey",
+		value: pubKey
+	});
+	return pubKeyAny;
+}
+
 Cosmos.prototype.newStdMsg = function(input) {
 	const stdSignMsg = new Object;
 	stdSignMsg.json = input;
@@ -109,56 +124,55 @@ Cosmos.prototype.newStdMsg = function(input) {
 	return stdSignMsg;
 }
 
-Cosmos.prototype.sign = function(stdSignMsg, ecpairPriv, modeType = "sync") {
-	// The supported return types includes "block"(return after tx commit), "sync"(return after CheckTx) and "async"(return right away).
-	let signMessage = new Object;
-	signMessage = stdSignMsg.json;
-	const json = JSON.stringify(sortObject(signMessage))
-		.replace(/&/g, '\\u0026')
-		.replace(/</g, '\\u003c')
-		.replace(/>/g, '\\u003e')
 
-	const hash = crypto.createHash('sha256').update(json).digest('hex');
-	const buf = Buffer.from(hash, 'hex');
-	let signObj = secp256k1.sign(buf, ecpairPriv);
-	var signatureBase64 = Buffer.from(signObj.signature, 'binary').toString('base64');
-	let signedTx = new Object;
-	signedTx = {
-	    "tx": {
-	        "msg": stdSignMsg.json.msgs,
-	        "fee": stdSignMsg.json.fee,
-	        "signatures": [
-	            {
-	            	"account_number": stdSignMsg.json.account_number,
-	            	"sequence": stdSignMsg.json.sequence,
-	                "signature": signatureBase64,
-	                "pub_key": {
-	                    "type": "tendermint/PubKeySecp256k1",
-	                    "value": getPubKeyBase64(ecpairPriv)
-	                }
+Cosmos.prototype.Sign = function(txBody, authInfo, accountNumber, privKey){
+
+	//cosnt test = new protomessage.
+	
+	const bodyBytes = message.cosmos.tx.v1beta1.TxBody.encode(txBody).finish();
+	const authInfoBytes = message.cosmos.tx.v1beta1.AuthInfo.encode(authInfo).finish();
+
+	const signDoc = new message.cosmos.tx.v1beta1.SignDoc({
+		body_bytes: bodyBytes,
+		auth_info_bytes: authInfoBytes,
+		chain_id: this.chainId,
+		account_number: Number(accountNumber)
+	});
+	let signMessage = message.cosmos.tx.v1beta1.SignDoc.encode(signDoc).finish();
+	const hash = crypto.createHash("sha256").update(signMessage).digest();
+	const sig = secp256k1.sign(hash, Buffer.from(privKey));
+	const txRaw = new message.cosmos.tx.v1beta1.TxRaw({
+		body_bytes: bodyBytes,
+		auth_info_bytes: authInfoBytes,
+		signatures: [sig.signature],
+	});
+	const txBytes = message.cosmos.tx.v1beta1.TxRaw.encode(txRaw).finish();
+	const txBytesBase64 = Buffer.from(txBytes, 'binary').toString('base64');
+	return txBytes;
+}
+Cosmos.prototype.broadcast = function(signedTxBytes, broadCastMode = "BROADCAST_MODE_SYNC") {
+	const txBytesBase64 = Buffer.from(signedTxBytes, 'binary').toString('base64');
+		console.log(txBytesBase64)
+		var options = { 
+			method: 'POST',
+			url: this.url + '/cosmos/tx/v1beta1/txs',
+			headers: 
+			{ 'Content-Type': 'application/json' },
+			body: { tx_bytes: txBytesBase64, mode: broadCastMode },
+			json: true 
+		};
+
+		return new Promise(function(resolve, reject){
+	        request(options, function (error, response, body) {
+	            if (error) return reject(error);
+	            try {
+	                resolve(body);
+	            } catch(e) {
+	                reject(e);
 	            }
-	        ],
-	        "memo": stdSignMsg.json.memo
-	    },
-	    "mode": modeType
-	}
-
-	return signedTx;
+	        });
+	    });
 }
-
-Cosmos.prototype.broadcast = function(signedTx) {
-	let broadcastApi = "/txs";
-
-	return fetch(this.url + broadcastApi, {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json'
-		},
-		body: JSON.stringify(signedTx)
-	})
-	.then(response => response.json())
-}
-
 module.exports = {
 	network: network
 }
