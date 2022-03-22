@@ -28,7 +28,8 @@ const message = require("../modules/messages/proto.js")
 ## Usage
 - Rizon: Generate Rizon address from mnemonic 
 ```js
-const rizonjs = require("rizonjs");
+const rizonjs = require("../src");
+const message = require("../modules/messages/proto.js")
 
 const chainId = "groot-15";
 const rizon = rizonjs.network(lcdUrl, chainId);
