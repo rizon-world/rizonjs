@@ -19,7 +19,7 @@ yarn build
 
 The SDK code should be documented enough for developers to explore and use it easily. Therefore the documentation might not cover all the capabilities of the SDK. Feel free to contribute if you wish to improve the code documentation and/or the provided samples.
 
-The [Documentation](./docs/README.md) contains:
+The [Documentation](./docs/lib/README.md) contains:
 
 -   Installation instructions
 -   Basic usage
