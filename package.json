@@ -1,12 +1,12 @@
 {
-    "name": "@rizon-world/rizonjs",
-    "version": "0.1.0",
-    "license": "Apache-2.0",
-    "description": "A JavasSript Open Source Library for Rizon",
-    "homepage": "https://github.com/rizon-world/rizonjs#readme",
-    "main": "build/index.js",
-    "typings": "build/index.d.ts",
-    "bugs": {
+  "name": "@rizon-world/rizonjs",
+  "version": "0.1.0",
+  "description": "RIZON JavaScript SDK library",
+  "homepage": "https://github.com/rizon-world/rizonjs#readme",
+  "main": "build/index.js",
+  "typings": "build/index.d.ts",
+  "license": "Apache-2.0",
+  "bugs": {
         "url": "https://github.com/rizon-world/rizonjs/issues"
     },
     "author": {
@@ -16,54 +16,72 @@
         "type": "git",
         "url": "https://github.com/rizon-world/rizonjs.git"
     },
-    "engines": {
-        "node": ">=8.0.0"
-    },
-    "keywords": [
+    "tags": [
         "rizon",
-        "atolo",
-        "cosmos",
-        "tendermint",
-        "ibc",
         "sdk",
-        "rpc"
+        "typescript",
+        "blockchain",
+        "rpc",
+        "cosmos",
+        "tendermint"
     ],
     "scripts": {
         "test": "cross-env NODE_ENV=test jest",
-        "build": "yarn clean && yarn build:lib && yarn build:js && yarn build:docs",
-        "build:lib": "tsc --emitDeclarationOnly",
-        "build:js": "babel src --out-dir build --extensions \".ts,.tsx\" --source-maps inline",
-        "build:docs": "rimraf docs/lib && typedoc --excludeExternals --excludeNotDocumented --readme none --out docs/lib --hideBreadcrumbs --disableSources",
+        "build": "yarn clean && yarn build:lib && yarn build:docs",
+        "build:lib": "tsc",
+        "build:docs": "rimraf docs/lib && typedoc --excludeExternals --readme none --out docs/lib --hideBreadcrumbs --disableSources",
         "clean": "rimraf build",
         "lint": "eslint '**/*.{ts,js}'",
         "format": "prettier --write '**/*.{js,jsx,ts,tsx,css,json,md,html,yml}'",
-        "bump": "npm version"
+        "bump": "npm version",
+		"set-proto": "yarn clean-proto && yarn get-proto && yarn define-proto && yarn postdefine-proto",
+        "clean-proto": "rm -rf proto",
+        "get-proto": "COSMOS_REF=v0.44.5 IBC_REF=v2.0.2 RIZON_REF=v0.3.0 sh ./scripts/get-proto.sh",
+        "define-proto": "sh ./scripts/define-proto.sh",
+        "postdefine-proto": "prettier --write \"src/codec/**/*.ts\""
     },
     "dependencies": {
-        "@cosmjs/stargate": "^0.27.1",
-        "@types/uuid": "^8.3.4",
+        "@cosmjs/amino": "^0.26.5",
+        "@cosmjs/crypto": "^0.26.5",
+        "@cosmjs/encoding": "^0.26.5",
+        "@cosmjs/math": "^0.26.5",
+        "@cosmjs/proto-signing": "^0.26.5",
+        "@cosmjs/stargate": "^0.26.5",
+        "@cosmjs/tendermint-rpc": "^0.26.5",
+        "@cosmjs/utils": "^0.26.5",
+        "@ledgerhq/hw-app-cosmos": "^6.11.2",
+        "@ledgerhq/hw-transport": "^6.11.2",
+        "@types/crypto-js": "^4.0.2",
+        "@types/ledgerhq__hw-transport": "^4.21.4",
+        "@types/uuid": "^8.3.1",
         "crypto-browserify": "^3.12.0",
         "crypto-js": "^4.1.1",
+        "long": "^4.0.0",
         "uuid": "^8.3.2"
     },
+    "optionalDependencies": {},
     "devDependencies": {
-        "@babel/cli": "^7.17.0",
-        "@babel/core": "^7.17.0",
-        "@babel/plugin-proposal-class-properties": "^7.16.7",
-        "@babel/plugin-transform-runtime": "^7.17.0",
-        "@babel/preset-env": "^7.16.11",
-        "@babel/preset-typescript": "^7.16.7",
-        "@types/crypto-js": "^4.1.0",
-        "@types/jest": "^27.4.0",
+        "@babel/cli": "^7.16.0",
+        "@babel/core": "^7.16.0",
+        "@babel/plugin-proposal-class-properties": "^7.16.0",
+        "@babel/plugin-transform-runtime": "^7.16.0",
+        "@babel/preset-env": "^7.16.0",
+        "@babel/preset-typescript": "^7.16.0",
+        "@ledgerhq/hw-transport-node-hid": "^6.11.2",
+        "@types/jest": "^27.0.2",
+        "@types/ledgerhq__hw-transport-node-hid": "^4.22.2",
+        "axios": "^0.21.4",
         "cross-env": "^7.0.3",
         "eslint": "^7.19.0",
         "gts": "^3.1.0",
-        "jest": "^27.5.0",
-        "prettier": "^2.5.1",
+        "jest": "^27.3.1",
+        "prettier": "^2.4.1",
         "rimraf": "^3.0.2",
-        "ts-jest": "^27.1.3",
-        "typedoc": "^0.22.11",
-        "typedoc-plugin-markdown": "^3.11.13",
+        "ts-jest": "^27.0.7",
+        "ts-proto": "^1.85.0",
+        "typedoc": "^0.22.9",
+        "typedoc-plugin-markdown": "^3.11.6",
         "typescript": "^4.4.4"
     }
+
 }

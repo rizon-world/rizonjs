@@ -1,13 +1,6 @@
 {
     "extends": ["eslint:recommended", "plugin:node/recommended", "prettier"],
     "plugins": ["node", "prettier"],
-    "settings": {
-        "node": {
-            "allowModules": ["@cosmjs/crypto", "@cosmjs/encoding"],
-            "resolvePaths": [],
-            "tryExtensions": [".js", ".json", ".node"]
-        }
-    },
     "rules": {
         "prettier/prettier": "error",
         "block-scoped-var": "error",

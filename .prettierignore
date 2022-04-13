@@ -1,3 +1,4 @@
+.github/workflows
 build
 docs
 node_modules

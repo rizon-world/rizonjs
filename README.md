@@ -1,104 +1,93 @@
-<h1 align="center">
-    RIZON - Javascript SDK
-</h1>
+# RIZON - Javascript SDK
+This Javascript SDK enables browsers and NodeJS clients to interact with the RIZON.
 
-A JavasSript Open Source Library for RIZON Blockchain.
+## SDK Usage
 
-## Installation
+### Node version
 
-In order to fully use this library, you need to run a local or remote full node and set up its rest server, which acts as an intermediary between the front-end and the full-node.
+The library is tested using **NodeJS 14.x,
 
-### Git
+It should also work in all recent browsers.
+
+### Installation
 
 ```bash
-git clone https://github.com/rizon-world/rizonjs.git
+yarn build
 ```
 
-## Import
+### Documentation
 
-#### NodeJS
+The SDK code should be documented enough for developers to explore and use it easily. Therefore the documentation might not cover all the capabilities of the SDK. Feel free to contribute if you wish to improve the code documentation and/or the provided samples.
 
-```js
-const rizonjs = require('rizonjs');
+The [Documentation](./docs/README.md) contains:
+
+-   Installation instructions
+-   Basic usage
+-   Code samples
+-   Code auto-generated documentation
+
+## SDK Features
+
+This SDK provides an easy access to all the available RIZON blockchain RPCs as well as the payload generation and the cryptographic features to properly consume those RPCs.
+
+**Most commonly used features:**
+
+-   Core cryptographic tools:
+    -   Seed, private key and encrypted mnemonic generation
+    -   Private and public keys management
+    -   Transaction payload generation
+    -   Transaction signature and verification
+-   Wallets:
+    -   Unlock wallets from private keys, keystore and mnemonic
+    -   Sign transaction using unlocked wallets
+-   Client service:
+    -   Connection to a blockchain node (http and socket mode)
+    -   Commonly used Tendermint and Cosmos RPCs
+    -   All RIZON dedicated RPCs
+    -   Transaction broadcast
+-   Transactions
+    -   Payload generation
+    -   Signature
+-   Messages & Types:
+    -   Cosmos messages payload building
+    -   Typescript implementation of RPCs requests and responses
+-   Other utils:
+    -   Encoding data from/to: Uint8Array, base64 and hex
+    -   Build Transaction search queries
+    -   Log & event parsing
+
+## Code structure
+
+The SDK is based on the [CosmJS](https://github.com/cosmos/cosmjs) implementation and heavily relies on it.
+
+It is intented to be used standalone, without having to import specific CosmJS packages which can get make implementations tricky and messy.
+
+Therefore all codecs, types, functions are features from the CosmJS SDK are either re-implemented by this SDK or re-exported for simplicity purposes.
+
+Directly importing the CosmJS SDK or other cryptographic library should be considered bad practice for most use cases.
+
+Do not hesitate to contribute to this repository. This SDK is intended to be a one-stop-shop for all RIZON javascript implementations and should definitely be improved over time by all its users.
+
+
+#### Ledger unittests
+
+In order to run the unittest involving Ledger devices you need to do the following:
+
+1. Chose which application you want to use for the tests (Cosmos or RIZON)
+2. Remove the `.skip` from all the tests your want to run in `./tests/ledger.test.ts`
+3. Connect a Ledger device and open either the Cosmos application or the Rizon application
+4. Run `yarn test tests/ledger.test.ts`
+5. Follow the instructions on your Ledger device to pass each test that require a user input
+
+## Protocol Buffer Codecs
+
+### Introduction
+
+As of [v0.40](https://github.com/cosmos/cosmos-sdk/releases/tag/v0.40.0), the Cosmos SDK uses [protocol buffers](https://developers.google.com/protocol-buffers) as its standard serialization format for blockchain state and wire communication. This library by default supports protocol buffer serialization for many of the standard queries and messages defined by the Cosmos SDK implementations.
+
+### Acquire the definition files and Generate codec files
+
+```bash
+yarn set-proto
 ```
 
-#### ES6 module
-
-```js
-import rizonjs from 'rizonjs';
-```
-
-#### Browser script
-
--   You can see example file at /example/browser-example.html
--   You need to setup rizon blockchain node in local or remote
-
-```js
-<script src="../dist/rizon.js"></script>
-```
-
-## Usage
-
--   Rizon: Generate Rizon address from mnemonic
-
-```js
-const rizonjs = require('rizonjs');
-
-const chainId = 'groot-14';
-const rizon = rizonjs.network(lcdUrl, chainId);
-
-const mnemonic = '...';
-rizon.setPath("m/44'/118'/0'/0/0");
-const address = rizon.getAddress(mnemonic);
-const ecpairPriv = rizon.getECPairPriv(mnemonic);
-```
-
-Generate ECPairPriv value that is needed for signing signatures
-
-```js
-const ecpairPriv = rizon.getECPairPriv(mnemonic);
-```
-
-Transfer ATOLO to designated address.
-
--   Make sure to input proper type, account number, and sequence of the rizon account to generate StdSignMsg. You can get those account information on blockchain
-
-```js
-rizon.getAccounts(address).then(data => {
-	let stdSignMsg = rizon.newStdMsg({
-		msgs: [
-			{
-				type: "cosmos-sdk/MsgSend",
-				value: {
-					amount: [
-						{
-							amount: String(100000),
-							denom: "uatolo"
-						}
-					],
-					from_address: address,
-					to_address: "rizon1xjdla8awqz8kw74sakdh969t7mm4ypwdwnj435"
-				}
-			}
-		],
-		chain_id: chainId,
-		fee: { amount: [ { amount: String(5000), denom: "uatolo" } ], gas: String(200000) },
-		memo: "",
-		account_number: String(data.account.account_number),
-		sequence: String(data.account.sequence)
-	});
-
-	...
-})
-```
-
-Sign transaction by using stdSignMsg and broadcast by using the Rizon REST API(LCD)
-
-```js
-const signedTx = rizon.sign(stdSignMsg, ecpairPriv);
-rizon.broadcast(signedTx).then((response) => console.log(response));
-```
-
-## Supporting Message Types
-
--   If you need more message types, you can see [/docs/msg_types](https://github.com/rizon-world/rizonjs/blob/main/docs/msg_types/rizon.md)
